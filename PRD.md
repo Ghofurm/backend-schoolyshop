@@ -124,8 +124,8 @@ Catatan: `bukti_foto` di `retur` disimpan sebagai JSON array path (minimal 1 fot
 
 | # | Stage | Isi | Status | File |
 |---|-------|-----|--------|------|
-| 0 | Fondasi | Paket, config, envelope respons, error JSON, health check, docs endpoint | IN PROGRESS | `docs/stages/stage-00-fondasi.md` |
-| 1 | Database | Migration, model, relasi, enum, factory, seeder | TODO | `docs/stages/stage-01-database.md` |
+| 0 | Fondasi | Paket, config, envelope respons, error JSON, health check, docs endpoint | DONE | `docs/stages/stage-00-fondasi.md` |
+| 1 | Database | Migration, model, relasi, enum, factory, seeder | IN PROGRESS | `docs/stages/stage-01-database.md` |
 | 2 | Auth | Register/login/logout, profil, role admin vs user | TODO | (belum dibuat) |
 | 3 | Master data Admin | Penjual, kategori, pengajuan, produk, harga/stok, lihat user, bantuan, email | TODO | (belum dibuat) |
 | 4 | Katalog, alamat, keranjang | Katalog publik + cari/filter, alamat, keranjang | TODO | (belum dibuat) |
