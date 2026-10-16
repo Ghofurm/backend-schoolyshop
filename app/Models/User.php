@@ -2,31 +2,60 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
+use App\Enums\StatusAkun;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+    protected $table = 'user';
+    protected $primaryKey = 'id_user';
+
+    protected $fillable = [
+        'nama',
+        'email',
+        'no_hp',
+        'password',
+        'status_akun',
+        'tanggal_daftar',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'status_akun' => StatusAkun::class,
+            'tanggal_daftar' => 'datetime',
         ];
+    }
+
+    public function alamat(): HasMany
+    {
+        return $this->hasMany(Alamat::class, 'id_user', 'id_user');
+    }
+
+    public function keranjang(): HasMany
+    {
+        return $this->hasMany(Keranjang::class, 'id_user', 'id_user');
+    }
+
+    public function pesanan(): HasMany
+    {
+        return $this->hasMany(Pesanan::class, 'id_user', 'id_user');
+    }
+
+    public function retur(): HasMany
+    {
+        return $this->hasMany(Retur::class, 'user_id', 'id_user');
     }
 }

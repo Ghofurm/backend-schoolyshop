@@ -28,7 +28,7 @@ Aktor: **Admin**, **User** (pembeli). Sistem eksternal: **Midtrans** (pembayaran
 |----|-----------|
 | D1 | Laravel versi terpasang, Sanctum (token), Scramble (`dedoc/scramble`) untuk OpenAPI/dokumentasi di `/docs/api`. Jika dosen mewajibkan Swagger UI klasik, ganti ke `darkaonline/l5-swagger` di stage 10. |
 | D2 | Nama tabel, PK, dan FK **persis seperti ERD** (singular, bahasa Indonesia). Tiap model wajib set `$table` dan `$primaryKey`. |
-| D3 | DB: MySQL atau PostgreSQL. Kode WAJIB DB-agnostic (tanpa raw SQL spesifik DB). Dev default MySQL. |
+| D3 | DB: MySQL nantinya akan migrasi ke cloud seperti supabase atau neon. Kode WAJIB DB-agnostic (tanpa raw SQL spesifik DB). Dev default MySQL. |
 | D4 | Tabel tambahan `log_aktivitas` (keamanan: persetujuan produk, perubahan status, webhook, refund). Notifikasi in-app memakai tabel bawaan Laravel `notifications`. |
 | D5 | Tabel tambahan `riwayat_retur` (riwayat tracking pengiriman retur, struktur sama dengan `riwayat_pengiriman`). |
 | D6 | Dokumen analisis ambigu soal "Diproses". Keputusan: webhook pembayaran berhasil mengubah pesanan menjadi **`dibayar`**; tombol "Proses Pesanan" Admin mengubahnya menjadi **`diproses`**. |
@@ -125,7 +125,7 @@ Catatan: `bukti_foto` di `retur` disimpan sebagai JSON array path (minimal 1 fot
 | # | Stage | Isi | Status | File |
 |---|-------|-----|--------|------|
 | 0 | Fondasi | Paket, config, envelope respons, error JSON, health check, docs endpoint | DONE | `docs/stages/stage-00-fondasi.md` |
-| 1 | Database | Migration, model, relasi, enum, factory, seeder | IN PROGRESS | `docs/stages/stage-01-database.md` |
+| 1 | Database | Migration, model, relasi, enum, factory, seeder | DONE | `docs/stages/stage-01-database.md` |
 | 2 | Auth | Register/login/logout, profil, role admin vs user | TODO | (belum dibuat) |
 | 3 | Master data Admin | Penjual, kategori, pengajuan, produk, harga/stok, lihat user, bantuan, email | TODO | (belum dibuat) |
 | 4 | Katalog, alamat, keranjang | Katalog publik + cari/filter, alamat, keranjang | TODO | (belum dibuat) |

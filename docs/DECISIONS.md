@@ -6,7 +6,7 @@ Dokumen ini mencatat keputusan teknis yang disepakati untuk Schooly Shop API.
 |----|-----------|
 | D1 | Laravel versi terpasang, Sanctum (token), Scramble (`dedoc/scramble`) untuk OpenAPI/dokumentasi di `/docs/api`. Jika dosen mewajibkan Swagger UI klasik, ganti ke `darkaonline/l5-swagger` di stage 10. |
 | D2 | Nama tabel, PK, dan FK **persis seperti ERD** (singular, bahasa Indonesia). Tiap model wajib set `$table` dan `$primaryKey`. |
-| D3 | DB: MySQL atau PostgreSQL. Kode WAJIB DB-agnostic (tanpa raw SQL spesifik DB). Dev default MySQL. |
+| D3 | DB: MySQL nantinya akan migrasi ke cloud seperti supabase atau neon. Kode WAJIB DB-agnostic (tanpa raw SQL spesifik DB). Dev default MySQL. |
 | D4 | Tabel tambahan `log_aktivitas` (keamanan: persetujuan produk, perubahan status, webhook, refund). Notifikasi in-app memakai tabel bawaan Laravel `notifications`. |
 | D5 | Tabel tambahan `riwayat_retur` (riwayat tracking pengiriman retur, struktur sama dengan `riwayat_pengiriman`). |
 | D6 | Dokumen analisis ambigu soal "Diproses". Keputusan: webhook pembayaran berhasil mengubah pesanan menjadi **`dibayar`**; tombol "Proses Pesanan" Admin mengubahnya menjadi **`diproses`**. |
