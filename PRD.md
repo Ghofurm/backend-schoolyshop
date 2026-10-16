@@ -2,8 +2,22 @@
 
 > Dokumen kerja untuk AI coding agent. Baca file ini + SATU file stage aktif saja.
 > Jangan membaca ulang seluruh repo atau dokumen analisis kecuali diminta.
+> **Langkah PERTAMA setiap stage: buat branch baru (lihat "Git Workflow" di §0). Jangan pernah bekerja langsung di `main`.**
 
 ## 0. Aturan Kerja Agent (WAJIB)
+
+### Git Workflow (lakukan PALING PERTAMA, sebelum mengubah apa pun)
+
+Proyek memakai alur branch + Pull Request. Satu stage = satu branch = satu PR. PR dibuat dan di-merge MANUAL oleh user.
+
+1. `git status` harus bersih. Jika ada perubahan yang belum di-commit, berhenti dan tanyakan ke user.
+2. `git checkout main && git pull origin main`. Stage sebelumnya harus berstatus `DONE` di §9 pada `main` (artinya PR-nya sudah di-merge). Jika belum, berhenti dan beri tahu user.
+3. Buat branch baru dari `main`: `git checkout -b stage-XX-nama-singkat` (contoh: `stage-02-auth`). Jika branch itu sudah ada (melanjutkan atau memperbaiki hasil review), cukup `git checkout` ke branch tersebut. Perbaikan dari review PR dikerjakan di branch yang sama sebagai commit tambahan, bukan branch baru.
+4. Semua pekerjaan dan commit HANYA di branch itu. Commit kecil per unit kerja yang logis dengan format `stage-XX: ringkasan singkat`.
+5. DILARANG: commit atau push langsung ke `main`, merge, rebase ke `main`, force-push, membuat/menutup/meng-merge Pull Request, atau menghapus branch.
+6. Di akhir stage: `git push -u origin <nama-branch>`. Jika push gagal (tidak ada akses), berhenti dan beri tahu user.
+
+### Aturan Umum
 
 1. Kerjakan hanya stage berstatus `IN PROGRESS` di §9. Detailnya ada di `docs/stages/stage-XX-*.md`. Jangan mulai stage yang file-nya belum ada.
 2. Ikuti urutan tugas di file stage. Jangan menambah fitur, paket, atau refactor di luar scope.
@@ -11,7 +25,7 @@
 4. Jalankan hanya test yang relevan (`php artisan test --filter=...`), bukan seluruh suite berulang kali.
 5. Bagian bertanda **MANUAL (user)** dikerjakan user, bukan agent. Jika terblokir karena itu, berhenti dan sebutkan apa yang dibutuhkan.
 6. Jika ada ketidakjelasan, pilih opsi paling sederhana yang sesuai PRD, catat 1 baris di `docs/DECISIONS.md`, lanjutkan. Bertanya hanya jika benar-benar terblokir.
-7. Setelah stage selesai: centang Definition of Done, ubah status stage di §9 menjadi `DONE`, commit (`stage-XX: ringkasan`), lalu lapor maksimal 10 baris (apa yang dibuat, cara mencoba, hal yang perlu dicek user). Lalu BERHENTI.
+7. Setelah stage selesai: centang Definition of Done, ubah status stage di §9 menjadi `DONE` (di branch stage, bukan di `main`), commit, push branch, lalu lapor maksimal 10 baris (apa yang dibuat, cara mencoba, hal yang perlu dicek user) ditambah blok **Draft PR**: judul `Stage XX: ...` dan deskripsi 3-5 baris yang bisa ditempel user. Lalu BERHENTI. Jangan mulai stage berikutnya sebelum user menyatakan PR sudah di-merge.
 8. Komentar kode dan laporan singkat. Jangan membuat README panjang atau dokumentasi di luar yang diminta.
 9. Dokumentasi API dibuat otomatis oleh Scramble dari kode, jadi setiap endpoint WAJIB memakai Form Request (input) dan API Resource (output) dengan return type yang jelas.
 10. Jangan pernah menulis API key/secret ke kode atau commit. Hanya lewat `.env` dan `config/*.php`.
@@ -126,7 +140,7 @@ Catatan: `bukti_foto` di `retur` disimpan sebagai JSON array path (minimal 1 fot
 |---|-------|-----|--------|------|
 | 0 | Fondasi | Paket, config, envelope respons, error JSON, health check, docs endpoint | DONE | `docs/stages/stage-00-fondasi.md` |
 | 1 | Database | Migration, model, relasi, enum, factory, seeder | DONE | `docs/stages/stage-01-database.md` |
-| 2 | Auth | Register/login/logout, profil, role admin vs user | TODO | (belum dibuat) |
+| 2 | Auth | Register/login/logout, profil, role admin vs user, perbaikan hasil review Stage 0-1 | IN PROGRESS | `docs/stages/stage-02-auth.md` |
 | 3 | Master data Admin | Penjual, kategori, pengajuan, produk, harga/stok, lihat user, bantuan, email | TODO | (belum dibuat) |
 | 4 | Katalog, alamat, keranjang | Katalog publik + cari/filter, alamat, keranjang | TODO | (belum dibuat) |
 | 5 | Biteship tarif + checkout | Service Biteship, area, ongkir, buat pesanan, stok | TODO | (belum dibuat) |
@@ -142,4 +156,5 @@ Catatan: `bukti_foto` di `retur` disimpan sebagai JSON array path (minimal 1 fot
 - [ ] Test relevan lulus.
 - [ ] Endpoint baru muncul di `/docs/api` dengan contoh request/respons yang benar.
 - [ ] Tidak ada secret di kode. `.env.example` diperbarui bila ada variabel baru.
-- [ ] Status stage di §9 diperbarui, commit dibuat, laporan singkat diberikan.
+- [ ] Dikerjakan di branch `stage-XX-*` (bukan `main`) dan branch sudah di-push.
+- [ ] Status stage di §9 diperbarui, laporan singkat + Draft PR diberikan.
