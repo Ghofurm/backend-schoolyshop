@@ -13,7 +13,7 @@ Proyek memakai alur branch + Pull Request. Satu stage = satu branch = satu PR. P
 1. `git status` harus bersih. Jika ada perubahan yang belum di-commit, berhenti dan tanyakan ke user.
 2. `git checkout main && git pull origin main`. Stage sebelumnya harus berstatus `DONE` di §9 pada `main` (artinya PR-nya sudah di-merge). Jika belum, berhenti dan beri tahu user.
 3. Buat branch baru dari `main`: `git checkout -b stage-XX-nama-singkat` (contoh: `stage-02-auth`). Jika branch itu sudah ada (melanjutkan atau memperbaiki hasil review), cukup `git checkout` ke branch tersebut. Perbaikan dari review PR dikerjakan di branch yang sama sebagai commit tambahan, bukan branch baru.
-4. Semua pekerjaan dan commit HANYA di branch itu. Commit kecil per unit kerja yang logis dengan format `stage-XX: ringkasan singkat`.
+4. Semua pekerjaan dan commit HANYA di branch itu. **Satu commit per butir tugas bernomor di file stage** (jangan digabung), format `stage-XX: ringkasan singkat`.
 5. DILARANG: commit atau push langsung ke `main`, merge, rebase ke `main`, force-push, membuat/menutup/meng-merge Pull Request, atau menghapus branch.
 6. Di akhir stage: `git push -u origin <nama-branch>`. Jika push gagal (tidak ada akses), berhenti dan beri tahu user.
 
@@ -141,7 +141,8 @@ Catatan: `bukti_foto` di `retur` disimpan sebagai JSON array path (minimal 1 fot
 | 0 | Fondasi | Paket, config, envelope respons, error JSON, health check, docs endpoint | DONE | `docs/stages/stage-00-fondasi.md` |
 | 1 | Database | Migration, model, relasi, enum, factory, seeder | DONE | `docs/stages/stage-01-database.md` |
 | 2 | Auth | Register/login/logout, profil, role admin vs user, perbaikan hasil review Stage 0-1 | DONE | `docs/stages/stage-02-auth.md` |
-| 3 | Master data Admin | Penjual, kategori, pengajuan, produk, harga/stok, lihat user, bantuan, email | TODO | (belum dibuat) |
+| 3a | Master data dasar | Kategori, penjual, lihat data user (read-only), bantuan | IN PROGRESS | `docs/stages/stage-03a-master-data.md` |
+| 3b | Pengajuan dan produk | Pengajuan produk (setujui/tolak), produk, harga/stok, aktif/nonaktif, email pemberitahuan | TODO | (belum dibuat) |
 | 4 | Katalog, alamat, keranjang | Katalog publik + cari/filter, alamat, keranjang | TODO | (belum dibuat) |
 | 5 | Biteship tarif + checkout | Service Biteship, area, ongkir, buat pesanan, stok | TODO | (belum dibuat) |
 | 6 | Midtrans | Snap, webhook + signature, kedaluwarsa, scheduler | TODO | (belum dibuat) |
