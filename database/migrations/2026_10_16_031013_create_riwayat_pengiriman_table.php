@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id_riwayat');
             $table->foreignId('id_pengiriman')->constrained('pengiriman', 'id_pengiriman')->onDelete('cascade');
             $table->string('status');
-            $table->string('keterangan');
+            $table->string('keterangan')->nullable();
             $table->timestamp('waktu_update')->useCurrent();
             $table->timestamps();
 

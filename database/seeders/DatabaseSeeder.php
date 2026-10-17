@@ -24,8 +24,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Admin
-        $adminPassword = env('SEED_ADMIN_PASSWORD', 'password');
+        $isDev = app()->environment(['local', 'testing']);
+
+        // 1. Admin — always seeded
+        $adminPassword = env('SEED_ADMIN_PASSWORD', $isDev ? 'password' : null);
+        if (! $isDev && empty($adminPassword)) {
+            throw new \RuntimeException('SEED_ADMIN_PASSWORD wajib diisi di environment selain local/testing.');
+        }
+
         $admin = Admin::updateOrCreate(
             ['email' => 'admin@schooly.test'],
             [
@@ -33,6 +39,13 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make($adminPassword),
             ]
         );
+
+        // Dummy data hanya di local/testing
+        if (! $isDev) {
+            return;
+        }
+
+        $userPassword = env('SEED_USER_PASSWORD', 'password');
 
         // 2. 5 Kategori
         $kategoriList = ['Seragam Sekolah', 'Alat Tulis & Buku', 'Makanan & Minuman', 'Kerajinan Tangan', 'Merchandise Sekolah'];
@@ -45,46 +58,11 @@ class DatabaseSeeder extends Seeder
 
         // 3. 5 Penjual
         $penjualData = [
-            [
-                'nama' => 'Ahmad Siswa',
-                'jenis_penjual' => JenisPenjual::SISWA,
-                'kelas_jabatan' => 'XII RPL 1',
-                'email' => 'ahmad@siswa.test',
-                'kontak' => '081234567801',
-                'status' => StatusPenjual::AKTIF,
-            ],
-            [
-                'nama' => 'Budi Guru',
-                'jenis_penjual' => JenisPenjual::GURU,
-                'kelas_jabatan' => 'Guru Kewirausahaan',
-                'email' => 'budi@guru.test',
-                'kontak' => '081234567802',
-                'status' => StatusPenjual::AKTIF,
-            ],
-            [
-                'nama' => 'Citra Karyawan',
-                'jenis_penjual' => JenisPenjual::KARYAWAN,
-                'kelas_jabatan' => 'Staf Tata Usaha',
-                'email' => 'citra@karyawan.test',
-                'kontak' => '081234567803',
-                'status' => StatusPenjual::AKTIF,
-            ],
-            [
-                'nama' => 'Dewi Siswa',
-                'jenis_penjual' => JenisPenjual::SISWA,
-                'kelas_jabatan' => 'XI Tata Boga',
-                'email' => 'dewi@siswa.test',
-                'kontak' => '081234567804',
-                'status' => StatusPenjual::AKTIF,
-            ],
-            [
-                'nama' => 'Eko Guru',
-                'jenis_penjual' => JenisPenjual::GURU,
-                'kelas_jabatan' => 'Pembina Koperasi',
-                'email' => 'eko@guru.test',
-                'kontak' => '081234567805',
-                'status' => StatusPenjual::AKTIF,
-            ],
+            ['nama' => 'Ahmad Siswa', 'jenis_penjual' => JenisPenjual::SISWA, 'kelas_jabatan' => 'XII RPL 1', 'email' => 'ahmad@siswa.test', 'kontak' => '081234567801', 'status' => StatusPenjual::AKTIF],
+            ['nama' => 'Budi Guru', 'jenis_penjual' => JenisPenjual::GURU, 'kelas_jabatan' => 'Guru Kewirausahaan', 'email' => 'budi@guru.test', 'kontak' => '081234567802', 'status' => StatusPenjual::AKTIF],
+            ['nama' => 'Citra Karyawan', 'jenis_penjual' => JenisPenjual::KARYAWAN, 'kelas_jabatan' => 'Staf Tata Usaha', 'email' => 'citra@karyawan.test', 'kontak' => '081234567803', 'status' => StatusPenjual::AKTIF],
+            ['nama' => 'Dewi Siswa', 'jenis_penjual' => JenisPenjual::SISWA, 'kelas_jabatan' => 'XI Tata Boga', 'email' => 'dewi@siswa.test', 'kontak' => '081234567804', 'status' => StatusPenjual::AKTIF],
+            ['nama' => 'Eko Guru', 'jenis_penjual' => JenisPenjual::GURU, 'kelas_jabatan' => 'Pembina Koperasi', 'email' => 'eko@guru.test', 'kontak' => '081234567805', 'status' => StatusPenjual::AKTIF],
         ];
 
         $penjualModels = [];
@@ -94,21 +72,11 @@ class DatabaseSeeder extends Seeder
 
         // 4. 15 Produk (masing-masing lewat pengajuan berstatus disetujui)
         $namaProdukList = [
-            'Seragam Putih Abu-abu OSIS',
-            'Batik Khas Sekolah Lengan Panjang',
-            'Topi dan Dasi Resmi Sekolah',
-            'Buku Modul Praktikum RPL',
-            'Paket Spidol & Alat Tulis',
-            'Tempat Pensil Rajut Handmade',
-            'Keripik Singkong Renyah Rasa Balado',
-            'Kue Kering Nastar Homemade',
-            'Roti Coklat Keju Fresh Oven',
-            'Gantungan Kunci Logo Sekolah Akrilik',
-            'Tote Bag Kanvas Lukis Tangan',
-            'Gelang Rajut Kreatif Karya Siswa',
-            'Tumbler Minum Eksklusif Schooly',
-            'Notebook Agenda Hardcover',
-            'Stiker Pack Maskot Sekolah',
+            'Seragam Putih Abu-abu OSIS', 'Batik Khas Sekolah Lengan Panjang', 'Topi dan Dasi Resmi Sekolah',
+            'Buku Modul Praktikum RPL', 'Paket Spidol & Alat Tulis', 'Tempat Pensil Rajut Handmade',
+            'Keripik Singkong Renyah Rasa Balado', 'Kue Kering Nastar Homemade', 'Roti Coklat Keju Fresh Oven',
+            'Gantungan Kunci Logo Sekolah Akrilik', 'Tote Bag Kanvas Lukis Tangan', 'Gelang Rajut Kreatif Karya Siswa',
+            'Tumbler Minum Eksklusif Schooly', 'Notebook Agenda Hardcover', 'Stiker Pack Maskot Sekolah',
         ];
 
         foreach ($namaProdukList as $idx => $nama) {
@@ -152,7 +120,7 @@ class DatabaseSeeder extends Seeder
                 'nama' => 'Pembeli ' . $u,
                 'email' => 'user' . $u . '@schooly.test',
                 'no_hp' => '08987654320' . $u,
-                'password' => Hash::make('password'),
+                'password' => Hash::make($userPassword),
                 'status_akun' => StatusAkun::AKTIF,
                 'tanggal_daftar' => now()->subDays(10),
             ]);

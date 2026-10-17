@@ -12,3 +12,5 @@ Dokumen ini mencatat keputusan teknis yang disepakati untuk Schooly Shop API.
 | D6 | Dokumen analisis ambigu soal "Diproses". Keputusan: webhook pembayaran berhasil mengubah pesanan menjadi **`dibayar`**; tombol "Proses Pesanan" Admin mengubahnya menjadi **`diproses`**. |
 | D7 | Pilihan kurir/layanan User disimpan di `pesanan` (`kurir_dipilih`, `layanan_dipilih`) karena baris `pengiriman` baru dibuat Admin kemudian. |
 | D8 | Dua model auth terpisah: `Admin` dan `User`, keduanya `HasApiTokens`. Token memakai ability `admin` atau `user`. Middleware alias `role.admin` dan `role.user`. |
+| D9 | Schema dokumentasi API Scramble di `/docs/api` otomatis mendeteksi objek data via instance `JsonResource` yang di-pass langsung ke `ApiResponse::success(data: ...)`. |
+
