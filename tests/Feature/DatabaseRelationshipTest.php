@@ -48,5 +48,16 @@ class DatabaseRelationshipTest extends TestCase
         $this->assertCount(2, $pesanan->detailPesanan);
         $this->assertInstanceOf(DetailPesanan::class, $pesanan->detailPesanan->first());
         $this->assertInstanceOf(Produk::class, $pesanan->detailPesanan->first()->produk);
+
+        // 4. Relasi Admin -> pengajuanProduk, pengiriman, retur, bantuan
+        $admin = \App\Models\Admin::create([
+            'nama' => 'Admin Test',
+            'email' => 'admintest@schooly.test',
+            'password' => 'password',
+        ]);
+        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Collection::class, $admin->pengajuanProduk);
+        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Collection::class, $admin->pengiriman);
+        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Collection::class, $admin->retur);
+        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Collection::class, $admin->bantuan);
     }
 }

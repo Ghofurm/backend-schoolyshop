@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('retur_id')->constrained('retur', 'retur_id')->onDelete('cascade');
             $table->string('status');
-            $table->string('keterangan');
+            $table->string('keterangan')->nullable();
             $table->timestamp('waktu_update')->useCurrent();
             $table->timestamps();
 

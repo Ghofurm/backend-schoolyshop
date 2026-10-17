@@ -1,32 +1,36 @@
 <?php
 
-use App\Support\ApiResponse;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HealthController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
-    Route::get('/health', function () {
-        $dbStatus = 'connected';
-        $dbError = null;
+    // Health check
+    Route::get('/health', HealthController::class);
 
-        try {
-            DB::connection()->getPdo();
-        } catch (\Throwable $e) {
-            $dbStatus = 'disconnected';
-            $dbError = $e->getMessage();
-        }
+    // User Auth (publik)
+    Route::prefix('auth')->group(function () {
+        Route::post('/register', [AuthController::class, 'register']);
+        Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
+    });
 
-        $data = [
-            'status' => 'healthy',
-            'timestamp' => now()->toIso8601String(),
-            'services' => [
-                'database' => [
-                    'status' => $dbStatus,
-                    'error' => $dbError,
-                ],
-            ],
-        ];
+    // User Auth & Profile (role.user)
+    Route::middleware('role.user')->group(function () {
+        Route::post('/auth/logout', [AuthController::class, 'logout']);
+        Route::get('/profile', [ProfileController::class, 'show']);
+        Route::put('/profile', [ProfileController::class, 'update']);
+        Route::put('/profile/password', [ProfileController::class, 'changePassword']);
+    });
 
-        return ApiResponse::success($data, 'System is healthy');
+    // Admin Auth
+    Route::prefix('admin/auth')->group(function () {
+        Route::post('/login', [AdminAuthController::class, 'login'])->middleware('throttle:login');
+
+        Route::middleware('role.admin')->group(function () {
+            Route::post('/logout', [AdminAuthController::class, 'logout']);
+            Route::get('/me', [AdminAuthController::class, 'me']);
+        });
     });
 });

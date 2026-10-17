@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class HealthCheckTest extends TestCase
@@ -16,25 +17,37 @@ class HealthCheckTest extends TestCase
                 'message' => 'System is healthy',
                 'data' => [
                     'status' => 'healthy',
-                ],
-                'meta' => null,
-                'errors' => null,
-            ])
-            ->assertJsonStructure([
-                'success',
-                'message',
-                'data' => [
-                    'status',
-                    'timestamp',
                     'services' => [
                         'database' => [
-                            'status',
-                            'error',
+                            'status' => 'connected',
                         ],
                     ],
                 ],
-                'meta',
-                'errors',
+                'meta' => null,
+                'errors' => null,
+            ]);
+    }
+
+    public function test_health_check_returns_503_when_database_fails(): void
+    {
+        DB::shouldReceive('connection->getPdo')
+            ->once()
+            ->andThrow(new \PDOException('Connection refused'));
+
+        $response = $this->getJson('/api/v1/health');
+
+        $response->assertStatus(503)
+            ->assertJson([
+                'success' => false,
+                'message' => 'System is unhealthy',
+                'data' => [
+                    'status' => 'unhealthy',
+                    'services' => [
+                        'database' => [
+                            'status' => 'disconnected',
+                        ],
+                    ],
+                ],
             ]);
     }
 
